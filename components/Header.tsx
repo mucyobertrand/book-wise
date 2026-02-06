@@ -2,15 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
+import NavItems from "./NavItems";
 
-const Header = () => {
+interface HeaderProps{
+  session: any;
+}
+const Header = ({session} : HeaderProps) => {
   return (
-    <header className="my-10 flex justify-between gap-5">
+    <header className="my-10 flex flex-row justify-between">
       <Link href="/">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
       </Link>
 
       <ul className="flex flex-row items-center gap-8">
+        <NavItems/>
+
         <li>
           <form
             action={async () => {

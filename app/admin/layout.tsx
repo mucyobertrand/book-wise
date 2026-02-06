@@ -14,12 +14,20 @@ const Layout = async ({ children }: { children: ReactNode }) => {
 
   if (!session?.user?.id) redirect("/sign-in");
 
-  const isAdmin = await db
-    .select({ isAdmin: users.role })
-    .from(users)
-    .where(eq(users.id, session.user.id))
-    .limit(1)
-    .then((res) => res[0]?.isAdmin === "ADMIN");
+  let isAdmin = false;
+  try {
+    isAdmin = await db
+      .select({ isAdmin: users.role })
+      .from(users)
+      .where(eq(users.id, session.user.id))
+      .limit(1)
+      .then((res) => res[0]?.isAdmin === "ADMIN");
+  } catch (error) {
+    // Silently handle database connection errors
+    if (error) {
+      // Database connection failed - defaulting to non-admin
+    }
+  }
 
   if (!isAdmin) redirect("/");
 
